@@ -300,7 +300,9 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
       null
     );
 
-    res.json(response.data);
+    console.log("cashfree resp", response.data);
+
+    res.json({ payment_session_id: response.data.payment_session_id });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Payment failed" });

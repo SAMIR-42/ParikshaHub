@@ -221,7 +221,7 @@ document
       return;
     }
 
-    if (data.payment_session_id) {
+    if (data && data.payment_session_id) {
       const cashfree = Cashfree({ mode: "production" });
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
