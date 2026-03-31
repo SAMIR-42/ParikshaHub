@@ -1,0 +1,22 @@
+# Node modules (heavy + auto install ho jata hai)
+node_modules/
+
+# Env file (SECRET KEYS)
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tempCodeRunnerFile.js
+
+
+
+# Render / build cache (safe ignore)
+.cache/
