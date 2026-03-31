@@ -1,0 +1,114 @@
+/* ====== PAGE BASE ====== */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #0b1020);
+  color: #e2e8f0;
+}
+
+.terms-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px 80px;
+  animation: fadeIn 0.8s ease;
+}
+
+/* ====== HEADINGS ====== */
+h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #38bdf8;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #94a3b8;
+  font-size: 15px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #7dd3fc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ====== SECTIONS ====== */
+section {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.25s ease, border 0.25s ease;
+}
+
+section:hover {
+  transform: translateY(-3px);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+}
+
+/* ====== LISTS ====== */
+ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #cbd5e1;
+}
+
+/* ====== PARAGRAPH ====== */
+p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* ====== ICONS ====== */
+i {
+  color: #38bdf8;
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====== MOBILE OPTIMIZATION ====== */
+@media (max-width: 600px) {
+  .terms-container {
+    padding: 25px 14px 60px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  li,
+  p {
+    font-size: 13px;
+  }
+
+  section {
+    padding: 15px;
+  }
+}
