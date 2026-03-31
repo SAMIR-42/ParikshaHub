@@ -54,9 +54,9 @@ app.use(
     saveUninitialized: false,
     proxy: true,
     cookie: {
-      secure: true, //prod me ise true kr do local pe isProd,
+      secure: isProd, //prod me ise true kr do local pe isProd,
       httpOnly: true,
-      sameSite: "none", //production me sirf none "none"
+      sameSite: isProd ? "none" : "lax", //production me sirf none "none"
     },
   })
 );
