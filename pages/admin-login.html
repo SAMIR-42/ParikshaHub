@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="admin-login.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-card">
+        <div class="logo">
+          <i class="fa-solid fa-shield-halved"></i>
+          <h2>Admin Panel</h2>
+          <p>Authorized Access Only</p>
+        </div>
+
+        <form id="adminLoginForm">
+          <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" placeholder="Admin Email" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" placeholder="Password" required />
+          </div>
+
+          <button type="submit">Secure Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="admin-login.js"></script>
+  </body>
+</html>
