@@ -49,14 +49,14 @@ app.set("trust proxy", 1);
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "pariksha-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     proxy: true,
     cookie: {
-      secure: isProd, //prod me ise true kr do local pe isProd,
+      secure: true, //prod me ise true kr do local pe isProd,
       httpOnly: true,
-      sameSite: isProd ? "none" : "lax", //production me sirf none "none"
+      sameSite: "none", //production me sirf none "none"
     },
   })
 );
