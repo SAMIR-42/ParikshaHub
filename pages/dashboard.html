@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ParikshaHub - Dashboard</title>
+
+    <link rel="stylesheet" href="dashboard.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        ParikshaHub
+      </div>
+
+      <div id="welcomeText" class="welcome"></div>
+
+      <button id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </header>
+    <!-- create test btn and popup -->
+    <div class="dashboard-actions">
+      <button id="createTestBtn" class="create-btn">
+        <i class="fa-solid fa-plus"></i>
+        Create Test
+      </button>
+    </div>
+
+    <!-- =============================
+              MY TESTS PANEL
+          ============================= -->
+
+    <section class="tests-section">
+      <div class="tests-header">
+        <h2>
+          <i class="fa-solid fa-clipboard-list" id="ur-test"></i> My Tests
+        </h2>
+
+        <!-- search bar -->
+        <input type="text" id="testSearch" placeholder="Search by class..." />
+      </div>
+
+      <!-- tests list container -->
+      <div id="testsContainer" class="tests-container">
+        <!-- tests yaha dynamically aayenge -->
+      </div>
+    </section>
+
+
+    <!-- Create Test Popup -->
+    <div id="createTestPopup" class="create-popup">
+      <div class="create-popup-box">
+        <div class="drag-handle"></div>
+        <div class="popup-header">
+          <h3>Create New Test</h3>
+          <i class="fa-solid fa-xmark" id="closeCreatePopup"></i>
+        </div>
+
+        <div class="popup-content">
+          <!-- STEP 1: Subject & Class selection -->
+          <div class="test-meta">
+            <input type="text" id="inputSubject" placeholder="Enter Subject" />
+            <input type="text" id="inputClass" placeholder="Enter Class" />
+          </div>
+
+          <!-- STEP 2: Questions container -->
+          <div id="questionsContainer">
+            <!-- Questions will be dynamically added here -->
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="popup-actions">
+            <button id="addQuestionBtn" class="popup-btn add">Add More</button>
+            <button id="createTestFinal" class="popup-btn create">
+              Create Test
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- user experience popup -->
+    <div id="devicePopup" class="device-popup">
+      <div class="popup-box">
+        <i class="fa-solid fa-desktop popup-icon"></i>
+
+        <h3>Better Experience on Desktop</h3>
+
+        <p>
+          For the best experience while creating and managing exams, we
+          recommend using ParikshaHub on a desktop or laptop.
+        </p>
+
+        <button id="popupOk">OK</button>
+      </div>
+    </div>
+
+    <!-- =============================
+DELETE test CONFIRM POPUP
+============================= -->
+
+    <div id="deletePopup" class="delete-popup">
+      <div class="delete-box">
+        <h3>Delete Test?</h3>
+
+        <p>This action cannot be undone.</p>
+
+        <div class="delete-actions">
+          <button id="cancelDelete">Cancel</button>
+
+          <button id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!--view test and  EDIT TEST POPUP -->
+
+    <div id="editTestPopup" class="edit-popup">
+      <div class="edit-box">
+        <div class="edit-header">
+          <h3>Edit Test</h3>
+
+          <i class="fa-solid fa-xmark" id="closeEditPopup"></i>
+        </div>
+
+        <div id="editMetaInfo" class="edit-info"></div>
+
+        <div class="edit-meta">
+          <input id="editSubject" placeholder="Subject" />
+
+          <input id="editClass" placeholder="Class" />
+        </div>
+
+        <div id="editQuestions"></div>
+      </div>
+    </div>
+
+    <!-- Delete Question Popup -->
+    <div id="deleteQPopup" class="delete-popup">
+      <div class="delete-box">
+        <h3>Delete Question?</h3>
+        <p>This cannot be undone.</p>
+        <div class="delete-actions">
+          <button id="cancelQDelete">Cancel</button>
+          <button id="confirmQDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- copy test link popup -->
+
+    <div id="copyPopup" class="copy-popup">
+      <i class="fa-solid fa-circle-check"></i>
+      Link Copied!
+    </div>
+
+    <!-- QR Popup -->
+    <div id="qrPopup" class="qr-popup">
+      <div class="qr-box">
+        <div class="qr-header">
+          <h3>Scan QR to Start Exam</h3>
+          <i class="fa-solid fa-xmark" id="closeQrPopup"></i>
+        </div>
+        <div id="qrCode"></div>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="resultPanel" class="slide-panel">
+      <div class="panel-header">
+        <h3>Test Results</h3>
+        <span id="closeResultPanel">✖</span>
+      </div>
+
+      <div class="result-top-bar">
+        <!-- student search box in result panel -->
+        <input
+          type="text"
+          id="studentSearch"
+          placeholder="Search by Name or Roll Number..."
+          class="student-search"
+        />
+
+        <!-- download all  student result in file btn -->
+        <button id="downloadResultBtn" class="download-btn">
+          <!-- <i class="fa-solid fa-file-arrow-down"></i> -->
+          <i class="fa-solid fa-download"></i>
+          <!-- Download Full Result -->
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <div class="result-table">
+          <div class="rt-head">
+            <span>Name</span>
+            <span>Roll</span>
+            <span>Marks</span>
+          </div>
+
+          <div id="resultData">
+            <!-- dynamic rows -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- student delete conform popup in result panel -->
+
+    <div id="deleteResultPopup" class="delete-popup">
+      <div class="delete-box">
+        <h3>Delete Student Result?</h3>
+        <p>This will erase all answers & marks.</p>
+        <div class="delete-actions">
+          <button id="cancelResultDelete">Cancel</button>
+          <button id="confirmResultDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- teacher size edit test me img full popup -->
+    <div id="imgPopup" class="img-popup" style="display: none">
+      <span class="img-close" onclick="closeImagePopup()">✖</span>
+      <img id="popupImg" />
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

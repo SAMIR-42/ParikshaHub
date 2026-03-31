@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>Admin Dashboard</span>
+      </div>
+
+      <button id="logoutBtn" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </header>
+
+    <main class="dashboard">
+      <div class="card" id="teachersCard">
+        <i class="fa-solid fa-users"></i>
+        <h3>Total Teachers</h3>
+        <p id="teacherCount">0</p>
+      </div>
+
+      <div class="card" id="testsCard">
+        <i class="fa-solid fa-file-circle-question"></i>
+        <h3>Total Tests</h3>
+        <p id="testCount">0</p>
+      </div>
+
+      <div class="card" id="studentsCard">
+        <i class="fa-solid fa-user-graduate"></i>
+        <h3>Total Students</h3>
+        <p id="studentCount">0</p>
+      </div>
+
+      <div class="card" id="revenueCard">
+        <i class="fa-solid fa-indian-rupee-sign"></i>
+        <h3>Total Revenue</h3>
+        <p id="revenueAmount">0</p>
+      </div>
+    </main>
+
+    <!-- 👥 Teachers Popup Panel -->
+    <div id="teacherPanel" class="panel">
+      <div class="panel-content">
+        <div class="panel-header">
+          <h3>Teachers List</h3>
+          <button onclick="closePanel()">✖</button>
+        </div>
+
+        <input
+          type="text"
+          id="teacherSearch"
+          placeholder="Search by name or email..."
+          oninput="loadTeachers()"
+        />
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="teacherTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🧪 Tests Popup Panel -->
+    <div id="testsPanel" class="panel">
+      <div class="panel-content">
+        <div class="panel-header">
+          <h3>Tests Overview</h3>
+          <button onclick="closeTestsPanel()">✖</button>
+        </div>
+
+        <input
+          type="text"
+          id="testSearch"
+          placeholder="Search teacher by name..."
+          oninput="loadTests()"
+        />
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Teacher ID</th>
+                <th>Teacher Name</th>
+                <th>Total Tests</th>
+                <th>Last Test Created</th>
+              </tr>
+            </thead>
+            <tbody id="testsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎓 Students Popup Panel -->
+    <div id="studentsPanel" class="panel">
+      <div class="panel-content">
+        <div class="panel-header">
+          <h3>Students Overview</h3>
+          <button onclick="closeStudentsPanel()">✖</button>
+        </div>
+        <input
+          type="text"
+          id="studentSearch"
+          placeholder="Search by name / roll / class..."
+          oninput="loadStudents()"
+        />
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Class</th>
+                <th>Last Attempt</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 💰 Revenue Panel -->
+    <div id="revenuePanel" class="panel">
+      <div class="panel-content">
+        <div class="panel-header">
+          <h3>Revenue Details</h3>
+          <button onclick="closeRevenuePanel()">✖</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center">
+          <!-- 1️⃣ SEARCH BAR -->
+          <input
+            type="text"
+            id="revenueSearch"
+            placeholder="Search by teacher or order id..."
+            oninput="loadRevenue()"
+            style="flex: 1"
+          />
+
+          <!-- 2️⃣ DOWNLOAD BUTTON -->
+          <button id="downloadBtn" class="download-btn">
+            <i class="fa-solid fa-download"></i>
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Teacher Name</th>
+                <th>Email</th>
+                <th>Order ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="revenueTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
