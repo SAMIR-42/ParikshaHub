@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ParikshaHub - Login</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="login.css" />
+  </head>
+
+  <body>
+    <div class="login-container">
+      <!-- LEFT -->
+
+      <!-- <div class="login-left">
+
+        <h1>ParikshaHub</h1>
+        <p>Secure exam system for teachers.</p>
+      </div> -->
+
+      <div class="login-left">
+
+        <video class="bg-video" autoplay muted loop playsinline preload="auto">
+          <source src="../assets/login-vidio.mp4" type="video/mp4">
+        </video>
+      
+        <div class="overlay-content">
+          <h1>ParikshaHub</h1>
+          <p>Secure exam system for teachers.</p>
+        </div>
+      
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="login-right">
+        <h2>Teacher Login</h2>
+
+        <form id="loginForm">
+          <div class="input-group">
+            <input type="email" id="email" placeholder="Email Address" />
+            <div class="error" id="emailError"></div>
+          </div>
+
+          <div class="input-group">
+            <input type="password" id="password" placeholder="Password" />
+            <div class="error" id="passError"></div>
+          </div>
+
+          <button type="submit">Login</button>
+
+          <p class="signup-link">
+            No account?
+            <a href="signup.html">Create account</a>
+          </p>
+        </form>
+
+        <div id="popup" class="popup"></div>
+      </div>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>

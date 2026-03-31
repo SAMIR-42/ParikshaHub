@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam</title>
+
+    <link rel="stylesheet" href="exam.css" />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- RULES POPUP -->
+    <div id="rulesPopup" class="popup-overlay">
+      <div class="popup-box">
+        <div class="popup-header">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Important Exam Rules
+        </div>
+
+        <div class="popup-content">
+          <p>• This exam is strictly monitored.</p>
+          <p>• Switching tabs will trigger warnings.</p>
+          <p>• Multiple violations will auto-submit your test.</p>
+          <p>• Do not refresh the page during the exam.</p>
+          <p>• Do not use unfair means.</p>
+          <p>• Your activity is being recorded.</p>
+          <br />
+          <p class="warning">
+            ⚠️ Any suspicious activity may lead to disqualification.
+          </p>
+        </div>
+
+        <button id="startExamBtn" class="start-btn">
+          I Understand, Start Exam
+        </button>
+      </div>
+    </div>
+
+    <!-- STUDENT DETAILS POPUP -->
+    <div id="studentPopup" class="popup-overlay" style="display: none">
+      <div class="popup-box student-box">
+        <div class="popup-header">
+          <i class="fa-solid fa-id-card"></i>
+          Student Details
+        </div>
+
+        <div class="popup-content">
+          <div class="input-group">
+            <input type="text" id="stuName" placeholder="Full Name" />
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="stuRoll" placeholder="Roll Number" />
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="stuClass" placeholder="Class" />
+          </div>
+        </div>
+
+        <button id="finalStartBtn" class="start-btn">Start Test</button>
+      </div>
+    </div>
+
+    <!-- MAIN PAGE (later use hoga) -->
+    <div class="exam-container">
+      <h1>Exam Loading...</h1>
+    </div>
+
+    <!-- Already Attempted Popup -->
+    <div id="attemptPopup" class="popup-overlay" style="display: none">
+      <div class="popup-box attempt-box">
+        <div class="popup-header">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          Attempt Already Exists
+        </div>
+
+        <div class="popup-content">
+          <p>You have already attempted this test.</p>
+          <p>Please contact your teacher if you need a re-attempt.</p>
+        </div>
+
+        <button id="closeAttemptPopup" class="start-btn">OK</button>
+      </div>
+    </div>
+
+    <!-- REFRESH WARNING POPUP -->
+    <div id="refreshPopup" class="popup-overlay" style="display: none">
+      <div class="popup-box refresh-box">
+        <div class="popup-header">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Warning!
+        </div>
+
+        <div class="popup-content" id="refreshPopupText">
+          ⚠️ Do not refresh the page during the exam.
+        </div>
+
+        <button id="closeRefreshPopup" class="start-btn">OK</button>
+      </div>
+    </div>
+
+    <!-- TAB SWITCH WARNING OVERLAY -->
+    <div id="antiCheatOverlay" class="anti-overlay" style="display: none">
+      <div class="anti-box">
+        <h2 id="antiTitle">Warning!</h2>
+        <p id="antiMsg">Do not switch tabs during exam.</p>
+        <div class="anti-timer" id="antiTimer">01:00</div>
+      </div>
+    </div>
+
+    <!-- Image Popup -->
+    <div id="imgPopup" class="img-popup" style="display: none">
+      <span class="img-close" onclick="closeImagePopup()">✖</span>
+      <img id="popupImg" />
+    </div>
+
+    <script src="exam.js"></script>
+  </body>
+</html>

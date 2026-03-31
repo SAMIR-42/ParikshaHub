@@ -1,0 +1,84 @@
+/* ===== Base ===== */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f7fb;
+  color: #1a1a1a;
+}
+
+/* ===== Hero ===== */
+.pp-hero {
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: white;
+  padding: 60px 20px 50px;
+  text-align: center;
+}
+
+.pp-hero-inner h1 {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.pp-hero-inner p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.pp-badge {
+  display: inline-block;
+  margin-top: 15px;
+  background: #22c55e;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Container ===== */
+.pp-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px 80px;
+}
+
+/* ===== Cards ===== */
+.pp-card {
+  background: white;
+  padding: 26px 28px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+  border-left: 5px solid #2563eb;
+}
+
+.pp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.pp-card h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.pp-card p {
+  margin: 0;
+  line-height: 1.7;
+  color: #475569;
+  font-size: 15px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 600px) {
+  .pp-hero-inner h1 {
+    font-size: 26px;
+  }
+  .pp-hero-inner p {
+    font-size: 15px;
+  }
+  .pp-card {
+    padding: 20px;
+  }
+}
