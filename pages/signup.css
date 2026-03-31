@@ -1,0 +1,257 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f1f5f9;
+}
+
+.signup-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT */
+
+.signup-left {
+  flex: 1;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.signup-left h1 {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+/* RIGHT */
+
+.signup-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+.signup-right h2 {
+  margin-bottom: 30px;
+}
+
+form {
+  width: 80%;
+  max-width: 350px;
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.error {
+  font-size: 13px;
+  color: red;
+  margin-top: 4px;
+}
+
+.login-link {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-link a {
+  color: #2563eb;
+}
+
+/* popup */
+
+.popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #16a34a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: none;
+}
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .signup-container {
+    flex-direction: column;
+  }
+
+  .signup-left {
+    height: 200px;
+  }
+}
+
+/* backgroud vidio css  */
+/* LEFT SIDE VIDEO FIX */
+.signup-left {
+  position: relative;
+  overflow: hidden;
+  background: none; /* blue remove kyuki video hai */
+}
+
+/* video full cover */
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* text upar dikhe */
+.overlay-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* dark overlay */
+.signup-left::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .bg-video {
+    object-position: center;
+  }
+}
+
+/* ================= MOBILE PREMIUM LAYOUT ================= */
+@media (max-width: 900px) {
+  body {
+    background: #e2e8f0;
+  }
+
+  .signup-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  /* VIDEO HERO */
+  .signup-left {
+    height: 42vh;
+    min-height: 280px;
+    padding: 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    display: none;
+  }
+
+  .overlay-content {
+    padding: 20px;
+  }
+
+  .overlay-content h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .overlay-content p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  /* FORM CARD */
+  .signup-right {
+    margin-top: 40px;
+    background: transparent;
+    padding: 0 16px 40px;
+  }
+
+  form {
+    width: 100%;
+    max-width: none;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 26px 18px;
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  }
+
+  .signup-right h2 {
+    font-size: 22px;
+    margin: 22px 0 18px;
+  }
+
+  input {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  button {
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* LOGIN LINK STYLISH */
+  .login-link {
+    margin-top: 18px;
+    font-size: 13px;
+  }
+
+  .login-link a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: #eff6ff;
+    border-radius: 30px;
+    font-weight: 600;
+  }
+
+  /* POPUP CENTER */
+  .popup {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 25px;
+  }
+}

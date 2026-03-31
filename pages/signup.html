@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ParikshaHub - Teacher Signup</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+
+  <body>
+    <div class="signup-container">
+      <!-- LEFT SIDE -->
+
+      <!-- <div class="signup-left">
+        <h1>ParikshaHub</h1>
+
+        <p>Create secure online exams with powerful anti-cheat tools.</p>
+      </div> -->
+
+      <div class="signup-left">
+        <video class="bg-video" autoplay muted loop playsinline preload="auto">
+          <source src="../assets/signup-vidio.mp4" type="video/mp4" />
+        </video>
+
+        <div class="overlay-content">
+          <h1>ParikshaHub</h1>
+          <p>Create secure online exams with powerful anti-cheat tools.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE -->
+
+      <div class="signup-right">
+        <h2>Teacher Signup</h2>
+
+        <form id="signupForm">
+          <div class="input-group">
+            <input type="text" id="name" placeholder="Teacher Name" />
+            <div class="error" id="nameError"></div>
+          </div>
+
+          <div class="input-group">
+            <input type="email" id="email" placeholder="Email Address" />
+            <div class="error" id="emailError"></div>
+          </div>
+
+          <div class="input-group">
+            <input type="password" id="password" placeholder="Password" />
+            <div class="error" id="passError"></div>
+          </div>
+
+          <button type="submit">Create Account</button>
+
+          <p class="login-link">
+            Already have account?
+            <a href="login.html">Login</a>
+          </p>
+        </form>
+
+        <div id="customPopup" class="popup"></div>
+      </div>
+    </div>
+
+    <script src="signup.js"></script>
+  </body>
+</html>
