@@ -257,6 +257,11 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
     return res.status(401).json({ error: "Not logged in" });
   }
 
+  //get teacher name from database
+  const [[teacher]] = await db.execute(
+    "SELECT name, email FROM teachers WHERE id=?", [req.session.teacherId]
+  );
+
   try {
     const subject = req.body.subject;
     const className = req.body.className;
@@ -286,8 +291,8 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
 
       customer_details: {
         customer_id: "cust_" + Date.now(),
-        customer_name: "Teacher",
-        customer_email: "teacher@test.com",
+        customer_name: teacher.name + " (T)",
+        customer_email: teacher.email,
         customer_phone: "9999999999",
       },
 
