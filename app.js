@@ -246,7 +246,10 @@ app.post("/api/save-test", async (req, res) => {
 
 Cashfree.XClientId = process.env.CASHFREE_APP_ID;
 Cashfree.XClientSecret = process.env.CASHFREE_SECRET_KEY;
-Cashfree.XEnvironment = process.env.CASHFREE_ENV;
+Cashfree.XEnvironment =
+  process.env.CASHFREE_ENV === "production"
+    ? Cashfree.Environment.PRODUCTION
+    : Cashfree.Environment.SANDBOX;
 
 // Generate order / session
 app.post("/api/create-payment", upload.any(), async (req, res) => {
@@ -293,17 +296,18 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
       },
     };
 
-    const cashfree = new Cashfree();
-    const response = await cashfree.PGCreateOrder({
-      apiVersion: "2023-08-01",
-    });
+    const response = await Cashfree.PGCreateOrder("2023-08-01", request);
 
     console.log("cashfree resp", response.data);
 
-    res.json({ payment_session_id: response.data?.payment_session_id || null });
+    res.json({
+      payment_session_id: response.data?.payment_session_id || null,
+      cashfree_mode:
+        process.env.CASHFREE_ENV === "production" ? "production" : "sandbox",
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Payment failed" });
+    console.log("cashfree error", error.response?.data || error.message);
+    res.status(500).json({ error: error.response?.data || "Payment failed" });
   }
 });
 

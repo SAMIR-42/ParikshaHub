@@ -222,7 +222,8 @@ document
     }
 
     if (data && data.payment_session_id) {
-      const cashfree = Cashfree({ mode: "production" });
+      const mode = data.cashfree_mode === "sandbox" ? "sandbox" : "production";
+      const cashfree = Cashfree({ mode });
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_self",
