@@ -66,7 +66,7 @@ document.querySelectorAll(".media-slider").forEach((slider) => {
 
   // --- AUTO SLIDE + PROGRESS ---
   function startAuto() {
-    interval = setInterval(nextSlide, 10000);
+    interval = setInterval(nextSlide, 20200);
     startProgress();
   }
 
@@ -80,7 +80,7 @@ document.querySelectorAll(".media-slider").forEach((slider) => {
     progress.style.width = "0%";
 
     setTimeout(() => {
-      progress.style.transition = "width 10s linear";
+      progress.style.transition = "width 22s linear";
       progress.style.width = "100%";
     }, 50);
   }
