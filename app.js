@@ -293,7 +293,7 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
         customer_id: "cust_" + Date.now(),
         customer_name: teacher.name + " (T)",
         customer_email: teacher.email,
-        customer_phone: "+91**********",
+        customer_phone: "+919999999999",
       },
 
       order_meta: {
