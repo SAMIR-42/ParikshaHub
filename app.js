@@ -346,7 +346,7 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
     };
 
     const request = {
-      order_amount: 1,
+      order_amount: 9,
       order_currency: "INR",
       order_id: orderId,
 
