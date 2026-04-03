@@ -45,20 +45,6 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Hero button scroll
-
-const heroBtn = document.querySelector(".secondary-btn");
-
-if (heroBtn) {
-  heroBtn.addEventListener("click", () => {
-    const section = document.querySelector(".workflow");
-
-    section.scrollIntoView({
-      behavior: "smooth",
-    });
-  });
-}
-
 // Prevent accidental image drag
 
 document.querySelectorAll("img").forEach((img) => {
