@@ -15,6 +15,13 @@ dotenv.config();
 
 const app = express();
 
+// Preserve raw request body for Cashfree webhook signature verification
+const rawBodySaver = (req, res, buf) => {
+  if (buf && buf.length) {
+    req.rawBody = buf.toString("utf8");
+  }
+};
+
 // Middlewares
 app.use(
   cors({
@@ -23,8 +30,8 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ verify: rawBodySaver }));
+app.use(express.urlencoded({ extended: true, verify: rawBodySaver }));
 
 // ================= IMAGE UPLOAD SETUP =================
 
@@ -251,6 +258,60 @@ Cashfree.XEnvironment =
     ? Cashfree.Environment.PRODUCTION
     : Cashfree.Environment.SANDBOX;
 
+async function savePaidTestForOrder(orderId, paymentId = "NA", amount = 1.0) {
+  const testData = pendingTests[orderId];
+  if (!testData) {
+    return { ok: false, reason: "PENDING_NOT_FOUND" };
+  }
+
+  // Idempotency guard: if already saved for this order, skip duplicate create
+  const [existing] = await db.execute(
+    "SELECT id FROM payments WHERE order_id=? AND status='SUCCESS' LIMIT 1",
+    [orderId]
+  );
+  if (existing.length > 0) {
+    delete pendingTests[orderId];
+    return { ok: true, duplicated: true };
+  }
+
+  const [testResult] = await db.execute(
+    "INSERT INTO tests (teacher_id, subject, class) VALUES (?,?,?)",
+    [testData.teacherId, testData.subject, testData.className]
+  );
+
+  const testId = testResult.insertId;
+
+  await db.execute(
+    `INSERT INTO payments
+   (teacher_id, test_id, order_id, payment_id, amount, currency, status, payment_time)
+   VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+    [testData.teacherId, testId, orderId, paymentId, amount, "INR", "SUCCESS"]
+  );
+
+  for (let q of testData.questions) {
+    await db.execute(
+      `INSERT INTO questions
+        (test_id, question_text, question_image, option_a, option_b, option_c, option_d, correct_option, marks, time_minutes)
+        VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      [
+        testId,
+        q.text,
+        q.image,
+        q.A,
+        q.B,
+        q.C,
+        q.D,
+        q.correct,
+        q.marks,
+        q.time,
+      ]
+    );
+  }
+
+  delete pendingTests[orderId];
+  return { ok: true, duplicated: false };
+}
+
 // Generate order / session
 app.post("/api/create-payment", upload.any(), async (req, res) => {
   if (!req.session.teacherId) {
@@ -328,61 +389,7 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
 //payment success root
 
 app.get("/payment-success", async (req, res) => {
-  const orderId = req.query.order_id;
-
-  if (!pendingTests[orderId]) {
-    return res.send("Invalid order");
-  }
-
-  try {
-    const testData = pendingTests[orderId];
-
-    const [testResult] = await db.execute(
-      "INSERT INTO tests (teacher_id, subject, class) VALUES (?,?,?)",
-      [testData.teacherId, testData.subject, testData.className]
-    );
-
-    const testId = testResult.insertId;
-
-    // 💾 Save Payment Record (SAFE)
-    await db.execute(
-      `INSERT INTO payments
-   (teacher_id, test_id, order_id, payment_id, amount, currency, status, payment_time)
-   VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-      [
-        testData.teacherId, // session se stored
-        testId, // abhi jo test create hua
-        orderId, // gateway order id
-        "NA", // payment id (gateway verify baad me karenge)
-        1.0, // amount
-        "INR",
-        "SUCCESS",
-      ]
-    );
-
-    for (let q of testData.questions) {
-      await db.execute(
-        `INSERT INTO questions
-        (test_id, question_text, question_image, option_a, option_b, option_c, option_d, correct_option, marks, time_minutes)
-        VALUES (?,?,?,?,?,?,?,?,?,?)`,
-        [
-          testId,
-          q.text,
-          q.image,
-          q.A,
-          q.B,
-          q.C,
-          q.D,
-          q.correct,
-          q.marks,
-          q.time,
-        ]
-      );
-    }
-
-    delete pendingTests[orderId];
-
-    res.send(`
+  res.send(`
 <!DOCTYPE html>
 <html>
 <head>
@@ -462,9 +469,51 @@ setTimeout(()=>{
 </body>
 </html>
 `);
+});
+
+// Cashfree webhook: only here we finalize test creation after verified success payment
+app.post("/api/payment-webhook", async (req, res) => {
+  try {
+    const signature = req.headers["x-webhook-signature"];
+    const timestamp = req.headers["x-webhook-timestamp"];
+
+    if (!signature || !timestamp || !req.rawBody) {
+      return res.status(400).json({ ok: false, message: "Invalid webhook" });
+    }
+
+    // Throws error when signature does not match
+    Cashfree.PGVerifyWebhookSignature(signature, req.rawBody, timestamp);
+
+    const event = req.body || {};
+    const orderId =
+      event?.data?.order?.order_id || event?.order_id || event?.orderId;
+    const paymentStatus =
+      event?.data?.payment?.payment_status || event?.payment_status;
+    const paymentId =
+      event?.data?.payment?.cf_payment_id ||
+      event?.data?.payment?.payment_id ||
+      "NA";
+    const paidAmount =
+      Number(event?.data?.order?.order_amount || event?.order_amount || 1) ||
+      1;
+
+    const isPaid =
+      paymentStatus === "SUCCESS" ||
+      String(event?.type || "").toUpperCase().includes("PAYMENT_SUCCESS");
+
+    if (!orderId) {
+      return res.status(200).json({ ok: true, ignored: "ORDER_ID_MISSING" });
+    }
+
+    if (!isPaid) {
+      return res.status(200).json({ ok: true, ignored: "NOT_SUCCESS_EVENT" });
+    }
+
+    const saved = await savePaidTestForOrder(orderId, paymentId, paidAmount);
+    return res.status(200).json({ ok: true, saved });
   } catch (err) {
-    console.log(err);
-    res.send("Something went wrong");
+    console.log("webhook verify/save error", err.message || err);
+    return res.status(400).json({ ok: false });
   }
 });
 
