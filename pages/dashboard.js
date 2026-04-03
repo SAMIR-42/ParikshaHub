@@ -891,3 +891,33 @@ async function loadProgress() {
 
   document.getElementById("funInsight").innerText = msg;
 }
+
+// 💡 GUIDE POPUP LOGIC
+
+const guideBtn = document.getElementById("guideBtn");
+const guidePopup = document.getElementById("guidePopup");
+const closeGuide = document.getElementById("closeGuide");
+
+let guideTimer;
+
+// open
+guideBtn.onclick = () => {
+  guidePopup.classList.add("show");
+
+  // auto close after 5 min
+  guideTimer = setTimeout(() => {
+    guidePopup.classList.remove("show");
+  }, 300000);
+};
+
+// close
+closeGuide.onclick = () => {
+  guidePopup.classList.remove("show");
+  clearTimeout(guideTimer);
+};
+
+// logout pe bhi close
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  guidePopup.classList.remove("show");
+});
+
