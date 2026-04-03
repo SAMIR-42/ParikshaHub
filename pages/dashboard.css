@@ -1419,11 +1419,11 @@ MY TESTS PANEL
 .guide-popup {
   position: fixed;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   transition: 0.4s;
@@ -1432,7 +1432,8 @@ MY TESTS PANEL
 
 /* ACTIVE SHOW */
 .guide-popup.show {
-  left: 0;
+  display: flex;
+  
 }
 
 /* BOX */
