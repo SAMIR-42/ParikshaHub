@@ -63,7 +63,7 @@ document.querySelectorAll(".media-slider").forEach((slider) => {
 
   // --- AUTO SLIDE + PROGRESS ---
   function startAuto() {
-    interval = setInterval(nextSlide, 20000);
+    interval = setInterval(nextSlide, 10000);
     startProgress();
   }
 
