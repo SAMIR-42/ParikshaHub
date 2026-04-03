@@ -218,3 +218,48 @@
 
 
   
+/* STEP LIST DESIGN */
+.steps-list {
+  list-style: none;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.steps-list li {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+/* Number circle */
+.steps-list li span {
+  min-width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Hover effect */
+.steps-list li:hover {
+  transform: translateX(5px);
+  background: rgba(56,189,248,0.1);
+}
+
+/* Title icon spacing */
+.step-content h2 i {
+  margin-right: 6px;
+  color: #38bdf8;
+}
