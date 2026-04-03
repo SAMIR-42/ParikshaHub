@@ -7,6 +7,9 @@ document.querySelectorAll(".media-slider").forEach((slider) => {
   const dotsContainer = slider.querySelector(".dots");
   const progress = slider.querySelector(".progress");
 
+  if (!track || items.length === 0) return;
+  if (!dotsContainer || !progress) return;
+
   let index = 0;
   let startX = 0;
   let isDragging = false;
@@ -77,7 +80,7 @@ document.querySelectorAll(".media-slider").forEach((slider) => {
     progress.style.width = "0%";
 
     setTimeout(() => {
-      progress.style.transition = "width 20s linear";
+      progress.style.transition = "width 10s linear";
       progress.style.width = "100%";
     }, 50);
   }
