@@ -854,15 +854,20 @@ document
   .getElementById("downloadResultBtn")
   .addEventListener("click", downloadFullResult);
 
-//teacher progress in teacher dashboard
-// open popup
-document.getElementById("openProgress").onclick = () => {
-  document.getElementById("progressPopup").classList.add("show");
-  loadProgress();
-};
+//teacher progress in teacher dashboard (guarded so page without button doesn't break)
+const progressBtn = document.getElementById("openProgress");
+const progressPopup = document.getElementById("progressPopup");
 
-function closeProgress() {
-  document.getElementById("progressPopup").classList.remove("show");
+if (progressBtn && progressPopup) {
+  // open popup
+  progressBtn.onclick = () => {
+    progressPopup.classList.add("show");
+    loadProgress();
+  };
+
+  function closeProgress() {
+    progressPopup.classList.remove("show");
+  }
 }
 
 // fetch data
