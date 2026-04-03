@@ -312,7 +312,16 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
     });
   } catch (error) {
     console.log("cashfree error", error.response?.data || error.message);
-    res.status(500).json({ error: error.response?.data || "Payment failed" });
+    const raw = error.response?.data;
+    let msg = "Payment failed";
+    if (raw != null) {
+      if (typeof raw === "string") msg = raw;
+      else if (typeof raw.message === "string") msg = raw.message;
+      else msg = JSON.stringify(raw);
+    } else if (error.message) {
+      msg = error.message;
+    }
+    res.status(500).json({ error: msg });
   }
 });
 
