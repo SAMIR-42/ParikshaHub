@@ -21,18 +21,14 @@ window.addEventListener("scroll", reveal);
 window.addEventListener("load", reveal);
 
 
-
 document.getElementById("refundMailBtn").onclick = () => {
   const email = "parikshahub@gmail.com";
 
   const subject = encodeURIComponent("Refund Request - ParikshaHub");
 
-  const body = encodeURIComponent(
-`Hello ParikshaHub Team,
+  const bodyText = `Hello ParikshaHub Team,
 
 I would like to request a refund for my payment.
-
-Please find my details below:
 
 -----------------------------
 Name: [Enter your name]
@@ -43,19 +39,24 @@ Amount Paid: ₹[Enter amount]
 Date of Payment: [Enter date]
 -----------------------------
 
-Reason for Refund:
-[Explain your issue clearly]
+Reason:
+[Write your issue]
 
-Proof Attached:
-- Payment Screenshot (Required)
-- Any Error Screenshot (if applicable)
+Attach:
+- Payment Screenshot
+- Error Screenshot (if any)
 
-I confirm that the above information is correct.
+Thank you.`;
 
-Thank you.`
-  );
+  const body = encodeURIComponent(bodyText);
 
-  const mailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+  // ✅ 1. Try opening mail app (Gmail app if default)
+  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+  window.location.href = mailtoLink;
 
-  window.open(mailLink, "_blank");
+  // ✅ 2. Fallback to Gmail web (if app not opened)
+  setTimeout(() => {
+    const gmailWeb = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    window.open(gmailWeb, "_blank");
+  }, 1200); // thoda delay dena important hai
 };
