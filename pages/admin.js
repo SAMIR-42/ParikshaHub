@@ -188,7 +188,7 @@ async function loadRevenue() {
         <td>${r.email}</td>
         <td>${r.order_id}</td>
         <td>₹${r.amount}</td>
-        <td>${r.status}</td>
+        <td><span class="rev-status-ok">Success</span></td>
         <td>${new Date(r.payment_time).toLocaleString()}</td>
       </tr>
     `;

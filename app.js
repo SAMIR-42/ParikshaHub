@@ -1221,7 +1221,8 @@ app.get("/api/admin/revenue", requireAdmin, async (req, res) => {
         t.email
       FROM payments p
       JOIN teachers t ON p.teacher_id = t.id
-      WHERE t.name LIKE ? OR p.order_id LIKE ?
+      WHERE p.status = 'SUCCESS'
+        AND (t.name LIKE ? OR p.order_id LIKE ?)
       ORDER BY p.id DESC
     `,
       [`%${search}%`, `%${search}%`]
@@ -1248,6 +1249,8 @@ app.get("/api/admin/revenue/download", requireAdmin, async (req, res) => {
         p.payment_time
       FROM payments p
       JOIN teachers t ON p.teacher_id = t.id
+      WHERE p.status = 'SUCCESS'
+      ORDER BY p.id DESC
     `);
 
     let csv = "Name,Email,OrderID,Amount,Status,Time\n";
