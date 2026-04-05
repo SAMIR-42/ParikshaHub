@@ -222,6 +222,22 @@ document
     }
 
     if (data && data.payment_session_id) {
+      try {
+        const baseRes = await fetch("/api/my-tests", { credentials: "include" });
+        const baseData = await baseRes.json();
+        if (baseData.success && baseData.tests) {
+          const t = baseData.tests;
+          const maxId =
+            t.length > 0 ? Math.max(...t.map((x) => Number(x.id) || 0)) : 0;
+          sessionStorage.setItem(
+            PH_TEST_BASELINE_KEY,
+            JSON.stringify({ count: t.length, maxId })
+          );
+        }
+      } catch {
+        /* baseline optional; polling still runs with 0,0 */
+      }
+
       const mode = data.cashfree_mode === "sandbox" ? "sandbox" : "production";
       const cashfree = Cashfree({ mode });
       cashfree.checkout({
@@ -242,7 +258,7 @@ async function loadTests() {
 
   const data = await res.json();
 
-  if (!data.success) return;
+  if (!data.success) return null;
 
   const container = document.getElementById("testsContainer");
 
@@ -276,9 +292,80 @@ async function loadTests() {
 
     container.appendChild(card);
   });
+
+  const tests = data.tests || [];
+  const maxId =
+    tests.length > 0 ? Math.max(...tests.map((t) => Number(t.id) || 0)) : 0;
+  return { count: tests.length, maxId };
 }
 
-loadTests();
+const PH_AFTER_PAYMENT_KEY = "parikshaHub_afterPayment";
+const PH_TEST_BASELINE_KEY = "parikshaHub_testBaseline";
+
+function startPostPaymentTestsPoll(baseline) {
+  const start = Date.now();
+  const maxMs = 15000;
+  const intervalMs = 2000;
+  let stopped = false;
+
+  const stop = () => {
+    if (stopped) return;
+    stopped = true;
+    clearInterval(intervalId);
+  };
+
+  const poll = async () => {
+    if (stopped) return;
+    if (Date.now() - start >= maxMs) {
+      stop();
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/my-tests", { credentials: "include" });
+      const data = await res.json();
+      if (!data.success || !data.tests) return;
+
+      const tests = data.tests;
+      const maxId =
+        tests.length > 0 ? Math.max(...tests.map((t) => Number(t.id) || 0)) : 0;
+      const count = tests.length;
+
+      if (count > baseline.count || maxId > baseline.maxId) {
+        stop();
+        await loadTests();
+      }
+    } catch {
+      /* ignore transient errors; timeout still applies */
+    }
+  };
+
+  poll();
+  const intervalId = setInterval(poll, intervalMs);
+}
+
+(async function initDashboardTests() {
+  await loadTests();
+
+  if (sessionStorage.getItem(PH_AFTER_PAYMENT_KEY) === "1") {
+    sessionStorage.removeItem(PH_AFTER_PAYMENT_KEY);
+
+    let baseline = { count: 0, maxId: 0 };
+    const raw = sessionStorage.getItem(PH_TEST_BASELINE_KEY);
+    sessionStorage.removeItem(PH_TEST_BASELINE_KEY);
+    if (raw) {
+      try {
+        const p = JSON.parse(raw);
+        if (typeof p.count === "number") baseline.count = p.count;
+        if (typeof p.maxId === "number") baseline.maxId = p.maxId;
+      } catch {
+        /* keep defaults */
+      }
+    }
+
+    startPostPaymentTestsPoll(baseline);
+  }
+})();
 
 // ================================
 // DELETE TEST

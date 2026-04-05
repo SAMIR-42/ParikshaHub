@@ -417,12 +417,14 @@ body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:c
 </div>
 <script>
 history.replaceState(null, "", "/payment-success");
-document.getElementById("go").onclick = function () {
+function goDashboardAfterPayment() {
+  try {
+    sessionStorage.setItem("parikshaHub_afterPayment", "1");
+  } catch (e) {}
   window.location.replace("/pages/dashboard.html");
-};
-setTimeout(function () {
-  window.location.replace("/pages/dashboard.html");
-}, 4000);
+}
+document.getElementById("go").onclick = goDashboardAfterPayment;
+setTimeout(goDashboardAfterPayment, 4000);
 </script>
 </body>
 </html>
