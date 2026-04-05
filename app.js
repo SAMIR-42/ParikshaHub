@@ -386,86 +386,44 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
   }
 });
 
-//payment success root
+// Return URL: Cashfree redirects here for success/fail/cancel alike — do not claim payment result.
+// Real test creation = webhook only (/api/payment-webhook).
 
 app.get("/payment-success", async (req, res) => {
   res.send(`
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ParikshaHub</title>
-
 <style>
-
-body{
-margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#f4f6fb;
-font-family:Inter, sans-serif;
-}
-
-.popup{
-background:white;
-padding:35px 40px;
-border-radius:12px;
-box-shadow:0 15px 35px rgba(0,0,0,0.15);
-text-align:center;
-animation:pop .4s ease;
-}
-
-.popup h2{
-color:#16a34a;
-margin-bottom:10px;
-}
-
-.popup p{
-color:#555;
-font-size:14px;
-}
-
-@keyframes pop{
-from{transform:scale(.8);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-
+body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;background:#f4f6fb;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;padding:20px;}
+.popup{background:#fff;padding:32px 36px;border-radius:14px;box-shadow:0 15px 40px rgba(0,0,0,.12);text-align:center;max-width:420px;width:100%;animation:pop .45s ease;}
+.popup h2{margin:0 0 12px;font-size:1.2rem;line-height:1.35;color:#1e293b;}
+.popup p{margin:0;color:#64748b;font-size:14px;line-height:1.55;}
+.sub{margin-top:14px;font-size:13px;color:#94a3b8;}
+.btn{margin-top:20px;padding:10px 22px;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;background:#2563eb;color:#fff;}
+.btn:hover{opacity:.95;}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
 </style>
-
 </head>
-
 <body>
-
 <div class="popup">
-<h2>✅ Test Created Successfully</h2>
-<p>Redirecting to dashboard...</p>
+<h2>Back to your dashboard</h2>
+<p>If your payment went through, your new test will show up in <b>My Tests</b> in a few seconds after our server confirms it.</p>
+<p class="sub">If you cancelled or the payment failed, simply create the test again and complete checkout.</p>
+<button type="button" class="btn" id="go">Go to dashboard</button>
 </div>
-
 <script>
-
-// history clear
-history.replaceState(null,null,"/payment-success");
-
-// history overwrite
-history.pushState(null, "", "/payment-success");
-
-// 4 sec baad redirect
-setTimeout(()=>{
-
-  // 5 fake entries add karo
-  for(let i=0;i<5;i++){
-    history.pushState(null,"","/payment-success");
-  }
-
-  // replace redirect
+history.replaceState(null, "", "/payment-success");
+document.getElementById("go").onclick = function () {
   window.location.replace("/pages/dashboard.html");
-
-},4000);
-
-
+};
+setTimeout(function () {
+  window.location.replace("/pages/dashboard.html");
+}, 4000);
 </script>
-
 </body>
 </html>
 `);
