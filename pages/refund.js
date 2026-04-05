@@ -22,7 +22,7 @@ window.addEventListener("load", reveal);
 
 
 document.getElementById("refundMailBtn").onclick = () => {
-  const email = "parikshahub@gmail.com";
+  const email = "parikshahub.support@gmail.com";
 
   const subject = encodeURIComponent("Refund Request - ParikshaHub");
 
