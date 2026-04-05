@@ -244,7 +244,12 @@ DELETE test CONFIRM POPUP
     </div>
 
     <!-- 💡 GUIDE BUTTON -->
-    <div id="guideBtn">💡</div>
+    <div id="guideBtn" aria-label="Usage guide">💡</div>
+
+    <!-- 🎧 SUPPORT BUTTON -->
+    <button type="button" id="supportBtn" aria-label="Support and help">
+      <i class="fa-solid fa-headphones"></i>
+    </button>
 
     <!-- GUIDE POPUP -->
     <div id="guidePopup" class="guide-popup">
@@ -265,6 +270,86 @@ DELETE test CONFIRM POPUP
           <li><span>6</span> To re-allow → delete from <b>Results</b></li>
           <li><span>7</span> Warnings only on <b>cheating attempt</b></li>
         </ul>
+      </div>
+    </div>
+
+    <!-- SUPPORT POPUP -->
+    <div id="supportPopup" class="support-popup">
+      <div class="support-box">
+        <div class="support-header">
+          <h3><i class="fa-solid fa-headphones"></i> Support &amp; Help</h3>
+          <i class="fa-solid fa-xmark" id="closeSupport" aria-label="Close"></i>
+        </div>
+
+        <div class="support-body">
+          <p class="support-lead">
+            Quick answers for teachers. Still stuck? Use the refund page or
+            email us — we reply as soon as we can.
+          </p>
+
+          <h4 class="support-subtitle">Payment &amp; test not showing</h4>
+          <p class="support-note">
+            <strong>Money deducted but test not in “My Tests”?</strong> Wait
+            1–2 minutes (bank + webhook), then open the dashboard again. If it
+            still doesn’t appear, read our refund policy and follow the steps
+            there.
+          </p>
+          <a
+            class="support-refund-btn"
+            href="refund.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fa-solid fa-file-contract"></i> Refund policy &amp; steps
+          </a>
+
+          <h4 class="support-subtitle">Try this first</h4>
+          <ul class="support-list">
+            <li>
+              <span>1</span>
+              <div>
+                <b>Refresh</b> the dashboard (or log out and log in once) after
+                returning from payment.
+              </div>
+            </li>
+            <li>
+              <span>2</span>
+              <div>
+                Before paying, make sure <b>subject, class</b>, and every
+                <b>question</b> (options, marks, time, correct answer) is
+                filled — then tap <b>Create Test</b> again.
+              </div>
+            </li>
+            <li>
+              <span>3</span>
+              <div>
+                If the payment page won’t load or errors out, try another
+                <b>browser</b> or <b>network</b> (Wi‑Fi / mobile data).
+              </div>
+            </li>
+            <li>
+              <span>4</span>
+              <div>
+                Use <b>desktop</b> for creating tests — mobile popups can
+                sometimes block fields or file uploads.
+              </div>
+            </li>
+          </ul>
+
+          <div class="support-email-block">
+            <h4 class="support-subtitle">Other questions</h4>
+            <p class="support-email-line">
+              Write to us at
+              <a
+                class="support-mail"
+                href="mailto:parikshahub@gmail.com?subject=ParikshaHub%20Support"
+                >parikshahub@gmail.com</a
+              >
+              — mention your registered email and what you were doing (e.g.
+              “payment done, test missing”).
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 

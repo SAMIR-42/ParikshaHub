@@ -55,6 +55,9 @@ window.onpopstate = function () {
 // logout
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
+  document.getElementById("guidePopup")?.classList.remove("show");
+  document.getElementById("supportPopup")?.classList.remove("show");
+
   await fetch("/api/logout", {
     credentials: "include",
   });
@@ -1008,8 +1011,54 @@ closeGuide.onclick = () => {
   clearTimeout(guideTimer);
 };
 
-// logout pe bhi close
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  guidePopup.classList.remove("show");
-});
+// 🎧 SUPPORT POPUP
+const supportBtn = document.getElementById("supportBtn");
+const supportPopup = document.getElementById("supportPopup");
+const closeSupport = document.getElementById("closeSupport");
+const supportBox = supportPopup?.querySelector(".support-box");
+
+let supportTimer;
+
+function openSupport() {
+  if (!supportPopup) return;
+  supportPopup.classList.add("show");
+  clearTimeout(supportTimer);
+  supportTimer = setTimeout(() => {
+    supportPopup.classList.remove("show");
+  }, 300000);
+}
+
+function closeSupportPopup() {
+  if (!supportPopup) return;
+  supportPopup.classList.remove("show");
+  clearTimeout(supportTimer);
+}
+
+if (supportBtn && supportPopup && closeSupport) {
+  supportBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openSupport();
+  });
+
+  closeSupport.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeSupportPopup();
+  });
+
+  supportPopup.addEventListener("click", () => {
+    closeSupportPopup();
+  });
+
+  if (supportBox) {
+    supportBox.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && supportPopup.classList.contains("show")) {
+      closeSupportPopup();
+    }
+  });
+}
 
