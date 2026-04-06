@@ -1,5 +1,4 @@
-// if already logged in go to dashboard
-
+// agar teacher already logged in hai toh usko dashboard pe redirect kar do, agar loggin nahi he to  10 seconds ke baad mobile device ke liye popup show karo
 async function checkSession() {
   let res = await fetch("/api/teacher", {
     credentials: "include",
@@ -16,10 +15,10 @@ async function checkSession() {
 
 checkSession();
 
-// mobile device popup (same logic as pages/dashboard.js)
+// mobile user ko better experience dene ke liye ek popup show karo jo better experience ke liye desktop use kro
 function showDevicePopup() {
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
+//agar mobile nahi he to popup na dikhao
   if (!isMobile) return;
 
   if (sessionStorage.getItem("devicePopupShown")) return;
@@ -30,20 +29,19 @@ function showDevicePopup() {
   if (!popup || !okBtn) return;
 
   popup.classList.add("show");
-
+//agar ak bar popup dikh gaya to save kr do ki popup dikha diya he
   sessionStorage.setItem("devicePopupShown", "yes");
-
+//popup pe ok dabane se close ho jayega
   okBtn.onclick = () => {
     popup.classList.remove("show");
   };
-
+//ok na bhi dabaye apne aap 10sec baad close ho jayega
   setTimeout(() => {
     popup.classList.remove("show");
   }, 10000);
 }
 
-// Smooth scroll for navigation links
-
+// Smooth scroll for navbar link (ui smooth feel ke liye)
 document.querySelectorAll("a[href^='#']").forEach((link) => {
   link.addEventListener("click", function (e) {
     const targetId = this.getAttribute("href");
@@ -62,8 +60,7 @@ document.querySelectorAll("a[href^='#']").forEach((link) => {
   });
 });
 
-// Navbar shadow on scroll
-
+// Navbar pe scroll karne pe shadow add karo (thoda sa depth dene ke liye)
 const navbar = document.querySelector(".navbar");
 
 window.addEventListener("scroll", () => {
@@ -74,8 +71,7 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Prevent accidental image drag
-
+//img ko drag hone se rok rahe clean ux ke liye
 document.querySelectorAll("img").forEach((img) => {
   img.addEventListener("dragstart", (e) => e.preventDefault());
 });
