@@ -474,11 +474,12 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// and load test inside popup
+// teacher kisi test pe click krega to backend se uska pura data fetch kr lenge.
 async function openEditTest(id) {
   const res = await fetch("/api/test/" + id, {
     credentials: "include",
   });
+  //aur idhar niche pure test data ko popup me render kr denge taki teacher live edit kr sake
   const data = await res.json();
 
   if (!data.success) return;
@@ -593,11 +594,12 @@ let timer;
 
 document.addEventListener("input", (e) => {
   if (!(e.target.dataset && e.target.dataset.id)) return;
-
+//teacher ke changes jaldi fast save nahi krenge 
   clearTimeout(timer);
 
   timer = setTimeout(async () => {
     const id = e.target.dataset.id;
+    //delect kr lenge ki konsa field me changes huye
     let field = "";
     let value = e.target.value;
 
@@ -607,18 +609,17 @@ document.addEventListener("input", (e) => {
     if (e.target.classList.contains("edit-C")) field = "option_c";
     if (e.target.classList.contains("edit-D")) field = "option_d";
     if (e.target.classList.contains("edit-correct")) field = "correct_option";
-
+//backend ko sirf changed field bhej denge (optimize update)
     await fetch("/api/update-question/" + id, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ field, value }),
     });
-  }, 500); // 0.5 sec delay
+  }, 500); // 0.5 sec delay kr denge bro jisse server pe load na pade..
 });
 
 //teacher size edit panel me img change live upload root
-
 document.addEventListener("change", async (e) => {
   if (!e.target.classList.contains("edit-img-input")) return;
 

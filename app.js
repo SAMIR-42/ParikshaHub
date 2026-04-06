@@ -615,7 +615,7 @@ app.put("/api/update-question/:id", async (req, res) => {
 
     const qid = req.params.id;
     const { field, value } = req.body;
-
+//yaha check kr lene ki test me changes huye, vo allowed fileds hi update ho (random columns update nahi kr denge.)
     const allowed = [
       "question_text",
       "option_a",
@@ -628,7 +628,7 @@ app.put("/api/update-question/:id", async (req, res) => {
     if (!allowed.includes(field)) {
       return res.json({ success: false });
     }
-
+//yaha bhi dynamic update query chala denge mtlb jo changes hua vahi field update ho. fast hoga bro time lag kam time jada
     await db.execute(
       `UPDATE questions q
        JOIN tests t ON q.test_id = t.id
@@ -642,7 +642,7 @@ app.put("/api/update-question/:id", async (req, res) => {
     res.json({ success: false });
   }
 });
-
+//sub and class pe test update kr denge isko bhi auto save hi kr diya(kon save btn save btn dabate rahega. fast bro fast)
 app.put("/api/update-test/:id", async (req, res) => {
   try {
     if (!req.session.teacherId) {
@@ -828,7 +828,7 @@ app.get("/api/question-timer/:attemptId/:questionId", async (req, res) => {
   res.json({ remaining });
 });
 
-//finish exam and marks calculate root
+//finish exam and marks calculate kar denge stu ka ans == correct ans se
 app.post("/api/finish-exam", async (req, res) => {
   const { attemptId } = req.body;
 
@@ -848,20 +848,20 @@ app.post("/api/finish-exam", async (req, res) => {
     // 2️⃣ Check each answer
     for (let ans of answers) {
       let marksGot = 0;
-
+//stud ka ans == corr ans compare kr lenge
       if (ans.selected_option === ans.correct_option) {
         marksGot = ans.marks;
         total += ans.marks;
       }
 
-      // 3️⃣ Update marks_got per question
+      //per qn marks save kr lenge
       await db.execute(`UPDATE student_answers SET marks_got=? WHERE id=?`, [
         marksGot,
         ans.id,
       ]);
     }
 
-    // 4️⃣ Update total marks
+    // final total_marks attempt table me update kr denge
     await db.execute(
       `UPDATE student_attempts
        SET total_marks=?, end_time=NOW()
@@ -893,7 +893,7 @@ app.get("/api/get-test/:id", async (req, res) => {
   res.json({ success: true, test: test[0], questions });
 });
 
-//student result show in dashboard
+//student ka result dash ke test result sec me
 app.get("/api/results/:testId", async (req, res) => {
   try {
     // ✅ STEP 1: session check (YAHI DALNA THA)
@@ -903,7 +903,7 @@ app.get("/api/results/:testId", async (req, res) => {
 
     const testId = req.params.testId;
 
-    // ✅ STEP 2: secure query (teacher ka hi test aaye)
+    // secure query (teacher a teacher b ka test nahi dekh sakta security bro security)
     const [rows] = await db.execute(
       `SELECT s.id, s.student_name, s.roll_no, s.total_marks
        FROM student_attempts s
@@ -929,7 +929,7 @@ app.delete("/api/delete-attempt/:id", async (req, res) => {
 
     const attemptId = req.params.id;
 
-    // ✅ secure delete (sirf apne test ka data delete hoga)
+    //teacher ko allow kr denge ki vo stud ko result se delete kr sake (lekin isme bhi teach a teach b ka nahi kr sakta )
     await db.execute(
       `DELETE sa, s
        FROM student_attempts s
