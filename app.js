@@ -101,12 +101,13 @@ async function connectDB() {
   }
 }
 
-// teacher sign up root
-
+// secure REST api teacher signup ke liye
 app.post("/api/signup", async (req, res) => {
   try {
+    //teacher se json data recive kiya
     const { name, email, password } = req.body;
 
+    //back validation rakha hai ki agar user ne koi field empty chhodi toh error message show ho jaye
     if (!name || !email || !password) {
       return res.json({
         success: false,
@@ -114,18 +115,22 @@ app.post("/api/signup", async (req, res) => {
       });
     }
 
+    //teacher ke pass ko plan store nahi kiya bcrypt has use kiya security strong banegi na ladleee
     const hash = await bcrypt.hash(password, 10);
 
+    //paramiterized query use kiya hai sql injection se bachne ke liye hackerr ki tai tai fishhh
     await db.execute(
       "INSERT INTO teachers (name,email,password) VALUES (?,?,?)",
       [name, email, hash]
     );
 
+    //frontend ke liye stuctured json response diya hai ki signup successful ho gaya
     res.json({
       success: true,
       message: "Signup successful",
     });
   } catch (err) {
+    //ak email se multiple acc na bane. ise email handling kahte he duplicate email handling...
     if (err.code === "ER_DUP_ENTRY") {
       return res.json({
         success: false,
@@ -133,6 +138,7 @@ app.post("/api/signup", async (req, res) => {
       });
     }
 
+    //frontend ke liye stuctured json response diya hai ki signup failed ho gaya
     res.json({
       success: false,
       message: "Signup failed",

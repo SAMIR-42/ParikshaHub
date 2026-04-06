@@ -1,5 +1,4 @@
-// if already logged in go to dashboard
-
+// check kro ki agar already logged in hai toh dashboard pe redirect kar do
 async function checkSession() {
   let res = await fetch("/api/teacher", {
     credentials: "include",
@@ -17,8 +16,10 @@ checkSession();
 const form = document.getElementById("signupForm");
 
 form.addEventListener("submit", async (e) => {
+  //from sub hone per default reload rok diya, varna page reload ho jata.
   e.preventDefault();
 
+  //inp fields clean kr rahe mtlb extra space hata rahe hai user ke input se
   let name = document.getElementById("name").value.trim();
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value.trim();
@@ -31,8 +32,7 @@ form.addEventListener("submit", async (e) => {
   emailError.textContent = "";
   passError.textContent = "";
 
-  /* validation */
-
+  //regex validataion- mtlb check krna ki user ne sahi format me input diya hai ya nahi, agar nahi diya toh error message show krna
   let nameRegex = /^[A-Za-z ]{3,40}$/;
   let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   let passRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{8,}$/;
@@ -60,6 +60,7 @@ form.addEventListener("submit", async (e) => {
       headers: {
         "Content-Type": "application/json",
       },
+      //cre : inc mtlb cookie ya session properly back tak jaye
       credentials: "include",
       body: JSON.stringify({ name, email, password }),
     });
