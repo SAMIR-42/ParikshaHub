@@ -987,7 +987,7 @@ async function loadProgress() {
   document.getElementById("funInsight").innerText = msg;
 }
 
-// 💡 GUIDE POPUP LOGIC
+// Guide popup
 
 const guideBtn = document.getElementById("guideBtn");
 const guidePopup = document.getElementById("guidePopup");
@@ -1011,7 +1011,7 @@ closeGuide.onclick = () => {
   clearTimeout(guideTimer);
 };
 
-// 🎧 SUPPORT POPUP
+// Support popup
 const supportBtn = document.getElementById("supportBtn");
 const supportPopup = document.getElementById("supportPopup");
 const closeSupport = document.getElementById("closeSupport");

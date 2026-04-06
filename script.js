@@ -8,10 +8,39 @@ async function checkSession() {
 
   if (data.loggedIn) {
     window.location.href = "/pages/dashboard.html";
+    return;
   }
+
+  setTimeout(showDevicePopup, 10000);
 }
 
 checkSession();
+
+// mobile device popup (same logic as pages/dashboard.js)
+function showDevicePopup() {
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (!isMobile) return;
+
+  if (sessionStorage.getItem("devicePopupShown")) return;
+
+  const popup = document.getElementById("devicePopup");
+  const okBtn = document.getElementById("popupOk");
+
+  if (!popup || !okBtn) return;
+
+  popup.classList.add("show");
+
+  sessionStorage.setItem("devicePopupShown", "yes");
+
+  okBtn.onclick = () => {
+    popup.classList.remove("show");
+  };
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 10000);
+}
 
 // Smooth scroll for navigation links
 

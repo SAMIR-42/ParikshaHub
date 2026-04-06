@@ -1393,52 +1393,67 @@ MY TESTS PANEL
   }
 }
 
-/* 💡 FLOATING GUIDE BUTTON */
-#guideBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 26px;
-  cursor: pointer;
-  background: #111;
-  padding: 12px;
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
-  animation: pulse 1.5s infinite;
-  z-index: 999;
-  line-height: 1;
-  user-select: none;
-}
-
-/* 🎧 SUPPORT FAB (beside guide — stacks on narrow screens) */
+/* Floating guide + support (minimal motion, clear shapes) */
+#guideBtn,
 #supportBtn {
   position: fixed;
-  bottom: 20px;
-  right: 86px;
+  z-index: 999;
   width: 50px;
   height: 50px;
+  padding: 0;
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  z-index: 999;
+  font-size: 19px;
+  line-height: 1;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Guide: rounded tile + book icon — distinct from circular support */
+#guideBtn {
+  bottom: 20px;
+  right: 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #0d9488;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.1);
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#guideBtn:hover {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0f766e;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
+
+#guideBtn:active {
+  background: #ccfbf1;
+}
+
+/* Support: solid circle, same blue family as dashboard */
+#supportBtn {
+  bottom: 20px;
+  right: 86px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.35);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 #supportBtn:hover {
-  transform: scale(1.06);
-  box-shadow: 0 8px 26px rgba(79, 70, 229, 0.55);
+  background: #1d4ed8;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.42);
 }
 
 #supportBtn:active {
-  transform: scale(0.96);
+  background: #1e40af;
 }
 
 @media (max-width: 420px) {
@@ -1451,13 +1466,6 @@ MY TESTS PANEL
     bottom: 20px;
     right: 20px;
   }
-}
-
-/* glow animation */
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 5px rgba(255,255,0,0.4);}
-  50% { transform: scale(1.2); box-shadow: 0 0 20px rgba(255,255,0,0.8);}
-  100% { transform: scale(1); box-shadow: 0 0 5px rgba(255,255,0,0.4);}
 }
 
 /* POPUP BACKGROUND */
