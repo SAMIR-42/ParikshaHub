@@ -146,15 +146,15 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-//login root
+//teacher ke liye login root 
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    //email se teac ko db me sarch kiya
     const [rows] = await db.execute("SELECT * FROM teachers WHERE email=?", [
       email,
     ]);
-
+    //agar email he hi nahi db me to err msg dikha diya
     if (rows.length === 0) {
       return res.json({
         success: false,
@@ -163,7 +163,7 @@ app.post("/api/login", async (req, res) => {
     }
 
     const teacher = rows[0];
-
+//pass ko bcrypt se compare kiya (security bro security)
     const match = await bcrypt.compare(password, teacher.password);
 
     if (!match) {
@@ -173,8 +173,8 @@ app.post("/api/login", async (req, res) => {
       });
     }
 
-    /* start session */
-
+   
+//jaise hi sahi email pass se login ho gaya user session starttttt ho gaya
     req.session.teacherId = teacher.id;
 
     res.json({
@@ -191,7 +191,7 @@ app.post("/api/login", async (req, res) => {
 // get logged in teacher info dashboard pe
 app.get("/api/teacher", async (req, res) => {
   if (!req.session.teacherId) {
-    return res.json({ loggedIn: false });
+    return res.json({ loggedIn: false });//agar session he to allow warna loggedIn false bhej do pura dash isi pe secure hai
   }
 
   const [rows] = await db.execute("SELECT name FROM teachers WHERE id=?", [
@@ -344,6 +344,7 @@ app.post("/api/create-payment", upload.any(), async (req, res) => {
 
     const orderId = "order_" + Date.now();
 
+    //yaha test ka data temp store kar rahe hai jab tak payment confirm nahi ho jata webhook se
     pendingTests[orderId] = {
       teacherId: req.session.teacherId,
       subject,
@@ -437,7 +438,7 @@ setTimeout(goDashboardAfterPayment, 4000);
 `);
 });
 
-// Cashfree webhook: only here we finalize test creation after verified success payment
+// Cashfree webhook: pe hi final test create hota he.
 app.post("/api/payment-webhook", async (req, res) => {
   try {
     const signature = req.headers["x-webhook-signature"];

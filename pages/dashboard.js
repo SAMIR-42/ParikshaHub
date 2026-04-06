@@ -1,11 +1,11 @@
-// check session + get teacher name
-
+// dash load hote hi teacher check and name show krna us teacher ka
 async function loadTeacher() {
   let res = await fetch("/api/teacher", {
-    credentials: "include",
+    credentials: "include",//session check
   });
   let data = await res.json();
 
+  //agar login nahi he to index.html pe bhej do
   if (!data.loggedIn) {
     window.location = "/index.html";
     return;
@@ -17,7 +17,7 @@ async function loadTeacher() {
 
   let i = 0;
 
-  // agar pehli bar login hua hai
+  // first time teach login hota he to typewriter effect se name ata he baad me refresh vagaire re name animate nahi hota.
   if (!sessionStorage.getItem("typed")) {
     welcomeEl.textContent = "";
 
@@ -25,24 +25,22 @@ async function loadTeacher() {
       if (i < text.length) {
         welcomeEl.textContent += text.charAt(i);
         i++;
-        setTimeout(typeWriter, 160);
+        setTimeout(typeWriter, 160);//name ki type hone ki speed
       } else {
-        sessionStorage.setItem("typed", "done");
+        sessionStorage.setItem("typed", "done");//ak bar type ho gaya pura to repeat na ho
       }
     }
 
     typeWriter();
   } else {
-    welcomeEl.textContent = text;
+    welcomeEl.textContent = text;//agar pehle se type ho chuka he to seedha name show kr do without animation
   }
-  setTimeout(showDevicePopup, 10000);
+  setTimeout(showDevicePopup, 10000);//10 sec ke baad desktop use krne  ke liye popup show karna
 }
 
 loadTeacher();
 
-//clear previous payment history
-
-// clear previous payment history
+// clear history clean taki pay page pe back jaane pe dashboard pe hi rahe na ki payment page pe jaye
 history.replaceState(null, "", "/pages/dashboard.html");
 
 //disable back btn
@@ -52,26 +50,28 @@ window.onpopstate = function () {
   history.pushState(null, null, location.href);
 };
 
-// logout
-
+// dashboard se logout
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   document.getElementById("guidePopup")?.classList.remove("show");
   document.getElementById("supportPopup")?.classList.remove("show");
 
+  //backend session destroy kiya and then user ko landing page pe bhej diya
   await fetch("/api/logout", {
     credentials: "include",
   });
 
+  // index html pe bhej diya
   window.location.replace("/index.html");
 });
 
 // mobile device popup
-
 function showDevicePopup() {
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+  //agar desk he to popup mat dikhao
   if (!isMobile) return;
 
+  //popup ak hi bar show kro
   if (sessionStorage.getItem("devicePopupShown")) return;
 
   const popup = document.getElementById("devicePopup");
@@ -81,14 +81,18 @@ function showDevicePopup() {
 
   sessionStorage.setItem("devicePopupShown", "yes");
 
+  //ok btn se close
   okBtn.onclick = () => {
     popup.classList.remove("show");
   };
 
+  //auto close ten sec baad
   setTimeout(() => {
     popup.classList.remove("show");
   }, 10000);
 }
+
+
 //create test btn and popup
 const createBtn = document.getElementById("createTestBtn");
 const createPopup = document.getElementById("createTestPopup");
@@ -121,7 +125,6 @@ dragHandle.addEventListener("touchmove", (e) => {
 });
 
 //add question js
-
 const addQBtn = document.getElementById("addQuestionBtn");
 const questionsContainer = document.getElementById("questionsContainer");
 let questionCount = 0;
@@ -175,24 +178,27 @@ function updateQuestionNumbers() {
   allQ.forEach((el, i) => (el.textContent = `Question ${i + 1}`));
 }
 
-//create test btn root
+//create test final btn click
 document
   .getElementById("createTestFinal")
   .addEventListener("click", async () => {
+    //sub and class liya test form se
     const subject = document.getElementById("inputSubject").value;
     const className = document.getElementById("inputClass").value;
 
+    //formdata use kiya kyu ki img bhi bhejni he na
     const formData = new FormData();
     formData.append("subject", subject);
     formData.append("className", className);
 
-    const questions = [];
+    const questions = [];//har qn ka data collect kiya
 
     document.querySelectorAll(".question-card").forEach((q, index) => {
       const imgFile = q.querySelector(".q-img").files[0];
 
+      //agar img he to backend ko bhej di img
       if (imgFile) {
-        formData.append("images_" + index, imgFile); // 👈 image bhej di
+        formData.append("images_" + index, imgFile); 
       }
 
       questions.push({
@@ -209,6 +215,7 @@ document
       });
     });
 
+    //qns ko json bana ke bheja kyo ki backend me easily parse ho jaye aur img alag se formdata me he to wo bhi mil jaye backend ko
     formData.append("questions", JSON.stringify(questions));
 
     const res = await fetch("/api/create-payment", {
@@ -219,13 +226,15 @@ document
 
     const data = await res.json();
 
+    //agar err aya to payment failed karke alert dikha do
     if (!res.ok) {
       alert(data.error || "Payment failed");
       return;
     }
-
+//agar pay session mil gaya to cashfree ka checkout opn kar do
     if (data && data.payment_session_id) {
       try {
+        //current test ka baseline save kiya baad me compare krenge
         const baseRes = await fetch("/api/my-tests", { credentials: "include" });
         const baseData = await baseRes.json();
         if (baseData.success && baseData.tests) {
@@ -240,7 +249,7 @@ document
       } catch {
         /* baseline optional; polling still runs with 0,0 */
       }
-
+//cashfree checkout page opn
       const mode = data.cashfree_mode === "sandbox" ? "sandbox" : "production";
       const cashfree = Cashfree({ mode });
       cashfree.checkout({
