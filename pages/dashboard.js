@@ -326,6 +326,7 @@ function startPostPaymentTestsPoll(baseline) {
     clearInterval(intervalId);
   };
 
+  //ye poling fun jo har two sec me backend hit krega
   const poll = async () => {
     if (stopped) return;
     if (Date.now() - start >= maxMs) {
@@ -334,17 +335,21 @@ function startPostPaymentTestsPoll(baseline) {
     }
 
     try {
+      //backend se latest test list le lenge
       const res = await fetch("/api/my-tests", { credentials: "include" });
       const data = await res.json();
       if (!data.success || !data.tests) return;
 
       const tests = data.tests;
+      //current test count and maxid nikal lenge
       const maxId =
         tests.length > 0 ? Math.max(...tests.map((t) => Number(t.id) || 0)) : 0;
       const count = tests.length;
-
+      //compare kr lenge old baseline se agar increase hua mtlb new test ban gayi
       if (count > baseline.count || maxId > baseline.maxId) {
+        //agar new test ban hi gayi he to poling stop kr denge ab
         stop();
+        //ui refresh kr denge new test show ho jayega dash pe
         await loadTests();
       }
     } catch {
@@ -357,11 +362,15 @@ function startPostPaymentTestsPoll(baseline) {
 }
 
 (async function initDashboardTests() {
+  //dash load hote hi pahle existing test load kr lenge means old test
   await loadTests();
 
+  //check kr lenge ki user payment ke baad hi dash pe aya he ki nahi
   if (sessionStorage.getItem(PH_AFTER_PAYMENT_KEY) === "1") {
+    //flag hata diya taki repeat na ho
     sessionStorage.removeItem(PH_AFTER_PAYMENT_KEY);
 
+    //baseline nikal lenge means old test data nikal lenge compare ke liye
     let baseline = { count: 0, maxId: 0 };
     const raw = sessionStorage.getItem(PH_TEST_BASELINE_KEY);
     sessionStorage.removeItem(PH_TEST_BASELINE_KEY);
@@ -375,6 +384,7 @@ function startPostPaymentTestsPoll(baseline) {
       }
     }
 
+    //pay ke baad polling st kr denge taki new test detect ho bacend se
     startPostPaymentTestsPoll(baseline);
   }
 })();
