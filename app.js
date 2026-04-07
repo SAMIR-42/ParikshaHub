@@ -946,10 +946,11 @@ app.delete("/api/delete-attempt/:id", async (req, res) => {
   }
 });
 
-//new api student exam timer ki
+//student ke exam ka remaining time nikal lenge.
 app.get("/api/exam-timer/:attemptId", async (req, res) => {
   const { attemptId } = req.params;
 
+  //db se exam st and total duration le lenge
   const [[row]] = await db.execute(
     `SELECT start_time, exam_duration_seconds
      FROM student_attempts
@@ -957,28 +958,36 @@ app.get("/api/exam-timer/:attemptId", async (req, res) => {
     [attemptId]
   );
 
+  //st time ko milisecond me convert kr denge
   const start = new Date(row.start_time).getTime();
+  //current time le lenge
   const now = Date.now();
+  //time kitna pass ho gaya 
   const passed = Math.floor((now - start) / 1000);
 
+  //remaining time calc kr lenge(max use krenge bro nahi to negative ho jayega)
   const remaining = Math.max(row.exam_duration_seconds - passed, 0);
 
+  //agar time end so exam expire
   if (remaining <= 0) {
     return res.json({ expired: true });
   }
 
+  //nahi to remaining time bhejte rho fronend ko
   res.json({ remaining });
 });
 
-//new api
+//stud ka qn opn hote hi start time store kr lenge 
 app.post("/api/question-start", async (req, res) => {
   const { attemptId, questionId } = req.body;
 
+  //pahle check kr lenge qn pahle attempt hua he ya nahi
   const [exists] = await db.execute(
     "SELECT id FROM student_answers WHERE attempt_id=? AND question_id=?",
     [attemptId, questionId]
   );
 
+  //agar qn 1st time opn ho rha entery create kro
   if (exists.length === 0) {
     await db.execute(
       `INSERT INTO student_answers
@@ -988,14 +997,16 @@ app.post("/api/question-start", async (req, res) => {
     );
   }
 
+  //success response de do fronend ko 
   res.json({ success: true });
 });
 
-// student self result
+//stud ko khud ka bhi result dikha denge exam end ke baad
 app.get("/api/my-result/:attemptId", async (req, res) => {
   try {
     const attemptId = req.params.attemptId;
 
+    //stu ka basic info and obtained marks 
     const [[row]] = await db.execute(
       `SELECT student_name, roll_no, class, total_marks, test_id
        FROM student_attempts
@@ -1003,7 +1014,7 @@ app.get("/api/my-result/:attemptId", async (req, res) => {
       [attemptId]
     );
 
-    // total test marks nikalne ke liye
+    // total test marks cal kr lenge means sare qn ka sum
     const [[tm]] = await db.execute(
       `SELECT SUM(marks) AS totalMarks
        FROM questions
@@ -1011,6 +1022,7 @@ app.get("/api/my-result/:attemptId", async (req, res) => {
       [row.test_id]
     );
 
+    //final stu ko apna score vs pure exam ka score dikha denge
     res.json({
       success: true,
       info: row,
@@ -1021,15 +1033,16 @@ app.get("/api/my-result/:attemptId", async (req, res) => {
   }
 });
 
-// GET TEST NAME FOR RESULT DOWNLOAD
+// result sheet dow me test ka name aana chahiye na
 app.get("/api/test-name/:id", async (req, res) => {
   try {
     const testId = req.params.id;
 
+    //db se sub ka name fetch kr lenge
     const [[row]] = await db.execute("SELECT subject FROM tests WHERE id=?", [
       testId,
     ]);
-
+//and frontend ko name bhej denge
     res.json({ success: true, name: row.subject });
   } catch (err) {
     res.json({ success: false });
@@ -1041,7 +1054,6 @@ app.get("/api/test-name/:id", async (req, res) => {
 //======================================================
 
 //admin login api root
-
 app.post("/api/admin/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -1075,13 +1087,11 @@ function requireAdmin(req, res, next) {
 }
 
 //admin page safe root
-
 app.get("/api/admin/check", requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
 //admin logout api
-
 app.post("/api/admin/logout", (req, res) => {
   req.session.destroy(() => {
     res.json({ success: true });
