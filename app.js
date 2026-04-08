@@ -1135,31 +1135,38 @@ app.delete("/api/admin/teacher/:id", requireAdmin, async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid teacher id" });
   }
 
-  const conn = await db.getConnection();
   try {
-    await conn.beginTransaction();
+    await db.beginTransaction();
 
     // remove teacher-linked data in safe order
-    await conn.execute("DELETE FROM student_answers WHERE attempt_id IN (SELECT id FROM student_attempts WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?))", [teacherId]);
-    await conn.execute("DELETE FROM student_attempts WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?)", [teacherId]);
-    await conn.execute("DELETE FROM questions WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?)", [teacherId]);
-    await conn.execute("DELETE FROM tests WHERE teacher_id=?", [teacherId]);
-    await conn.execute("DELETE FROM payments WHERE teacher_id=?", [teacherId]);
-    const [result] = await conn.execute("DELETE FROM teachers WHERE id=?", [teacherId]);
+    await db.execute(
+      "DELETE FROM student_answers WHERE attempt_id IN (SELECT id FROM student_attempts WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?))",
+      [teacherId]
+    );
+    await db.execute(
+      "DELETE FROM student_attempts WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?)",
+      [teacherId]
+    );
+    await db.execute(
+      "DELETE FROM questions WHERE test_id IN (SELECT id FROM tests WHERE teacher_id=?)",
+      [teacherId]
+    );
+    // keep payments delete before tests for FK-safe order in stricter schemas
+    await db.execute("DELETE FROM payments WHERE teacher_id=?", [teacherId]);
+    await db.execute("DELETE FROM tests WHERE teacher_id=?", [teacherId]);
+    const [result] = await db.execute("DELETE FROM teachers WHERE id=?", [teacherId]);
 
     if (!result.affectedRows) {
-      await conn.rollback();
+      await db.rollback();
       return res.status(404).json({ success: false, message: "Teacher not found" });
     }
 
-    await conn.commit();
+    await db.commit();
     res.json({ success: true });
   } catch (err) {
-    await conn.rollback();
+    await db.rollback();
     console.log(err);
     res.status(500).json({ success: false, message: "Delete failed" });
-  } finally {
-    conn.release();
   }
 });
 

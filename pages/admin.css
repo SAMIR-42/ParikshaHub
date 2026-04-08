@@ -219,3 +219,94 @@ th {
   color: #166534;
   background: #dcfce7;
 }
+
+/* Delete modal + status toast */
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 16px;
+}
+
+.confirm-modal.show {
+  display: flex;
+}
+
+.confirm-box {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.2);
+}
+
+.confirm-box h4 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.confirm-box p {
+  color: #475569;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel,
+.btn-delete {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: #fff;
+}
+
+.admin-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1300;
+  background: #0f172a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.admin-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-toast.success {
+  background: #166534;
+}
+
+.admin-toast.error {
+  background: #b91c1c;
+}

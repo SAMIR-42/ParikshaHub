@@ -184,6 +184,24 @@
       </div>
     </div>
 
+    <!-- Delete Teacher Confirm Modal -->
+    <div id="deleteTeacherModal" class="confirm-modal" aria-hidden="true">
+      <div class="confirm-box">
+        <h4>Delete Teacher?</h4>
+        <p>This will permanently remove the teacher and related records.</p>
+        <div class="confirm-actions">
+          <button type="button" id="cancelDeleteTeacher" class="btn-cancel">
+            Cancel
+          </button>
+          <button type="button" id="confirmDeleteTeacher" class="btn-delete">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="adminToast" class="admin-toast" aria-live="polite"></div>
+
     <script src="admin.js"></script>
   </body>
 </html>

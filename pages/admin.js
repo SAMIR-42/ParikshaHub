@@ -9,6 +9,9 @@ async function checkAdmin() {
 
 checkAdmin();
 
+let pendingDeleteTeacherId = null;
+let toastTimer = null;
+
 // 🚪 Logout
 document.getElementById("logoutBtn").onclick = async () => {
   await fetch("/api/admin/logout", { method: "POST" });
@@ -65,26 +68,59 @@ async function loadTeachers() {
 }
 
 // delete teacher from admin panel
-async function deleteTeacher(teacherId) {
-  const ok = confirm("Are you sure you want to delete this teacher?");
-  if (!ok) return;
-
-  const res = await fetch(`/api/admin/teacher/${teacherId}`, {
-    method: "DELETE",
-  });
-  const data = await res.json();
-
-  if (!data.success) {
-    alert(data.message || "Failed to delete teacher");
-    return;
-  }
-
-  loadTeachers();
-  loadTeacherCount();
-  loadTestCount();
-  loadRevenueAmount();
-  alert("Teacher deleted successfully");
+function deleteTeacher(teacherId) {
+  pendingDeleteTeacherId = teacherId;
+  document.getElementById("deleteTeacherModal").classList.add("show");
 }
+
+function closeDeleteTeacherModal() {
+  document.getElementById("deleteTeacherModal").classList.remove("show");
+  pendingDeleteTeacherId = null;
+}
+
+function showToast(message, type = "success") {
+  const toast = document.getElementById("adminToast");
+  toast.textContent = message;
+  toast.className = `admin-toast ${type} show`;
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+async function confirmDeleteTeacher() {
+  if (!pendingDeleteTeacherId) return;
+
+  const teacherId = pendingDeleteTeacherId;
+  closeDeleteTeacherModal();
+
+  try {
+    const res = await fetch(`/api/admin/teacher/${teacherId}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      showToast(data.message || "Failed to delete teacher", "error");
+      return;
+    }
+
+    await Promise.all([
+      loadTeachers(),
+      loadTeacherCount(),
+      loadTestCount(),
+      loadRevenueAmount(),
+    ]);
+
+    showToast("Teacher deleted successfully", "success");
+  } catch {
+    showToast("Server error while deleting teacher", "error");
+  }
+}
+
+document.getElementById("cancelDeleteTeacher").onclick = closeDeleteTeacherModal;
+document.getElementById("confirmDeleteTeacher").onclick = confirmDeleteTeacher;
 
 // 🧪 Load total tests count
 async function loadTestCount() {
