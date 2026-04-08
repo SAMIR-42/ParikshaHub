@@ -56,10 +56,34 @@ async function loadTeachers() {
         <td>${t.name}</td>
         <td>${t.email}</td>
         <td>${new Date(t.created_at).toLocaleDateString()}</td>
-        <td><button class="delete-btn">Delete</button></td>
+        <td>
+          <button class="delete-btn" onclick="deleteTeacher(${t.id})">Delete</button>
+        </td>
       </tr>
     `;
   });
+}
+
+// delete teacher from admin panel
+async function deleteTeacher(teacherId) {
+  const ok = confirm("Are you sure you want to delete this teacher?");
+  if (!ok) return;
+
+  const res = await fetch(`/api/admin/teacher/${teacherId}`, {
+    method: "DELETE",
+  });
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "Failed to delete teacher");
+    return;
+  }
+
+  loadTeachers();
+  loadTeacherCount();
+  loadTestCount();
+  loadRevenueAmount();
+  alert("Teacher deleted successfully");
 }
 
 // 🧪 Load total tests count
